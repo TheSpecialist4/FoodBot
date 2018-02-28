@@ -7,6 +7,9 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+engine = create_engine('sqlite:///foodbot.db')
+Base.metadata.create_all(engine)
+
 class MainIngredient(Base):
     __tablename__ = "main_ingredient"
     id = Column(Integer, primary_key = True)
@@ -23,9 +26,12 @@ class Dish(Base):
     __tablename__ = "dish"
     id = Column(Integer, primary_key = True)
     name = Column(String(250), nullable = False)
-    isBreakfast = Column(Integer, nullable = False)
+    is_breakfast = Column(Integer, nullable = False)
     description = Column(String(250))
-    cookingTime = Column(String(30))
+    cooking_time = Column(String(30))
+    recipe_link = Column(String(100), nullable = False)
+    main_ingredient_id = Column(Integer, ForeignKey('main_ingredient.id'))
+    main_ingredient = relationship(MainIngredient)
 
     @property
     def serialize(self):
@@ -36,7 +42,3 @@ class Dish(Base):
             'description': self.description,
             'cookingTime': self.cookingTime
         }
-
-engine = create_engine('sqlite:///foodbot.db')
-
-Base.metadata.create_all(engine)
