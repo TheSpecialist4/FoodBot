@@ -1,5 +1,5 @@
 from app import app
-from app import request
+from flask import request, redirect, url_for
 
 @app.route('/')
 @app.route('/home/')
